@@ -36,8 +36,4 @@ fi;
 
 DATA=$(tail -c +$SKIP $LOGFILE | grep -F 'succeeded for username' | grep -Ff $TOR_EXIT_NODES_FILE | awk '{print $1,$2,$3,$4,$5,"User "$13" is using TOR [IP: "$6"]"}')
 
-IFS=$'\n'
-for LINE in $DATA; do
-  echo "$LINE" | mail -S 'VPN connection from TOR exit node' $ALERT_RECEPIENT
-done
-unset IFS
+echo "$DATA" | mail -S 'VPN connection from TOR exit node' $ALERT_RECEPIENT
