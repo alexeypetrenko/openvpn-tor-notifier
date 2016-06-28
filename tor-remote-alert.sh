@@ -32,8 +32,10 @@ fi
 if [ $(stat -c%s $LOGFILE) -lt $SKIP ]; then
   # New file is smaller than the old one. Resetting SKIP.
   SKIP=0
-fi;
+fi
 
 DATA=$(tail -c +$SKIP $LOGFILE | grep -F 'succeeded for username' | grep -Ff $TOR_EXIT_NODES_FILE | awk '{print $1,$2,$3,$4,$5,"User "$13" is using TOR [IP: "$6"]"}')
 
-echo "$DATA" | mail -S 'VPN connection from TOR exit node' $ALERT_RECEPIENT
+if [ ! -z "$DATA" ]; then
+  echo "$DATA" | mail -S 'VPN connection from TOR exit node' $ALERT_RECEPIENT
+fi
